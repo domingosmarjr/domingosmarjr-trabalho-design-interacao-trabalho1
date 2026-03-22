@@ -1,3 +1,5 @@
+const cartao = document.getElementById("cartao");
+
 const texto = document.getElementById("texto");
 const corTexto = document.getElementById("corTexto");
 const corFundo = document.getElementById("corFundo");
@@ -7,63 +9,95 @@ const imagem = document.getElementById("imagem");
 const tipoElemento = document.getElementById("tipoElemento");
 const btnAdd = document.getElementById("addElemento");
 
-const textoCartao = document.getElementById("textoCartao");
-const cartao = document.getElementById("cartao");
-const imgCartao = document.getElementById("imgCartao");
+let elementoSelecionado = null;
 
-// Atualização principal
-function atualizarCartao() {
-    textoCartao.textContent = texto.value || "Seu texto aqui";
-    textoCartao.style.color = corTexto.value;
-    textoCartao.style.fontSize = tamanho.value + "px";
-    cartao.style.backgroundColor = corFundo.value;
-
-    if (imagem.value.trim() !== "") {
-        imgCartao.src = imagem.value;
-        imgCartao.style.display = "block";
-    } else {
-        imgCartao.style.display = "none";
+// =========================
+// SELECIONAR ELEMENTO
+// =========================
+cartao.addEventListener("click", (e) => {
+    if (e.target.classList.contains("elemento")) {
+        selecionarElemento(e.target);
     }
+});
+
+function selecionarElemento(el) {
+    // remove seleção anterior
+    document.querySelectorAll(".elemento").forEach(e => {
+        e.classList.remove("selecionado");
+    });
+
+    elementoSelecionado = el;
+    el.classList.add("selecionado");
 }
 
-// Criar novos elementos no cartão
+// =========================
+// ATUALIZAÇÕES
+// =========================
+function atualizarCartao() {
+    if (!elementoSelecionado) return;
+
+    elementoSelecionado.textContent = texto.value || "Texto editável";
+    elementoSelecionado.style.color = corTexto.value;
+    elementoSelecionado.style.fontSize = tamanho.value + "px";
+
+    cartao.style.backgroundColor = corFundo.value;
+}
+
+// =========================
+// INSERIR IMAGEM
+// =========================
+imagem.addEventListener("change", () => {
+    if (imagem.value.trim() === "") return;
+
+    const img = document.createElement("img");
+    img.src = imagem.value;
+    img.alt = "Imagem do cartão";
+    img.classList.add("elemento");
+
+    cartao.appendChild(img);
+});
+
+// =========================
+// CRIAR ELEMENTOS
+// =========================
 btnAdd.addEventListener("click", () => {
     const tipo = tipoElemento.value;
-
     if (!tipo) return;
 
-    let novoElemento;
+    let novo;
 
     if (tipo === "titulo") {
-        novoElemento = document.createElement("h4");
-        novoElemento.textContent = "Novo título";
+        novo = document.createElement("h3");
+        novo.textContent = "Título editável";
     }
 
     if (tipo === "paragrafo") {
-        novoElemento = document.createElement("p");
-        novoElemento.textContent = "Novo parágrafo";
+        novo = document.createElement("p");
+        novo.textContent = "Parágrafo editável";
     }
 
     if (tipo === "caixa") {
-        novoElemento = document.createElement("div");
-        novoElemento.textContent = "Caixa destaque";
-        novoElemento.style.border = "1px solid #c1121f";
-        novoElemento.style.padding = "10px";
-        novoElemento.style.marginTop = "10px";
+        novo = document.createElement("div");
+        novo.textContent = "Caixa editável";
+        novo.style.border = "1px solid #c1121f";
+        novo.style.padding = "10px";
     }
 
-    if (novoElemento) {
-        novoElemento.style.marginTop = "10px";
-        cartao.appendChild(novoElemento);
+    if (novo) {
+        novo.classList.add("elemento");
+        novo.setAttribute("contenteditable", "true");
+        novo.style.marginTop = "10px";
+
+        cartao.appendChild(novo);
     }
 
-    // evita erro do usuário (reseta select)
     tipoElemento.value = "";
 });
 
-// Eventos
+// =========================
+// EVENTOS
+// =========================
 texto.addEventListener("input", atualizarCartao);
 corTexto.addEventListener("input", atualizarCartao);
 corFundo.addEventListener("input", atualizarCartao);
 tamanho.addEventListener("input", atualizarCartao);
-imagem.addEventListener("input", atualizarCartao);

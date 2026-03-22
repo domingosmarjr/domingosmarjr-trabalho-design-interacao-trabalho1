@@ -113,6 +113,20 @@ img:hover {
     border-radius: 8px;
 }
 
+.elemento {
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.elemento.selecionado {
+    outline: 2px dashed #c1121f;
+    padding: 5px;
+}
+
+.elemento[contenteditable="true"]:focus {
+    outline: 2px solid #fff;
+}
+
 /* FORMULÁRIO */
 form {
     background: #1a1a1a;
