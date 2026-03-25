@@ -13,11 +13,9 @@ const btnAdd = document.getElementById("addElemento");
 
 let elementoSelecionado = null;
 
-// inicia com primeiro elemento
 const primeiro = document.querySelector(".elemento");
 if (primeiro) selecionarElemento(primeiro);
 
-// selecionar elemento
 cartao.addEventListener("click", (e) => {
     if (e.target.classList.contains("elemento")) {
         selecionarElemento(e.target);
@@ -32,7 +30,6 @@ function selecionarElemento(el) {
     elementoSelecionado = el;
     el.classList.add("selecionado");
 
-    // evita erro com imagem
     if (texto) {
         texto.value = el.tagName === "IMG" ? "" : el.textContent;
     }
@@ -41,26 +38,23 @@ function selecionarElemento(el) {
 function atualizarCartao() {
     if (!elementoSelecionado) return;
 
-    // não tenta editar texto de imagem
-    if (elementoSelecionado.tagName !== "IMG") {
+    if (elementoSelecionado.tagName !== "IMG" && texto) {
         elementoSelecionado.textContent = texto.value || "Texto editável";
     }
 
-    elementoSelecionado.style.color = corTexto?.value || "#000";
-    elementoSelecionado.style.fontSize = (tamanho?.value || 16) + "px";
+    if (corTexto) elementoSelecionado.style.color = corTexto.value;
+    if (tamanho) elementoSelecionado.style.fontSize = tamanho.value + "px";
 }
 
-// eventos protegidos
-texto?.addEventListener("input", atualizarCartao);
-corTexto?.addEventListener("input", atualizarCartao);
-tamanho?.addEventListener("input", atualizarCartao);
+texto && texto.addEventListener("input", atualizarCartao);
+corTexto && corTexto.addEventListener("input", atualizarCartao);
+tamanho && tamanho.addEventListener("input", atualizarCartao);
 
-corFundo?.addEventListener("input", () => {
+corFundo && corFundo.addEventListener("input", () => {
     cartao.style.backgroundColor = corFundo.value;
 });
 
-// imagem via URL
-imagem?.addEventListener("change", () => {
+imagem && imagem.addEventListener("change", () => {
     const url = imagem.value.trim();
     if (!url) return;
 
@@ -74,8 +68,7 @@ imagem?.addEventListener("change", () => {
     selecionarElemento(img);
 });
 
-// criar elementos
-btnAdd?.addEventListener("click", () => {
+btnAdd && btnAdd.addEventListener("click", () => {
     const tipo = tipoElemento.value;
     if (!tipo) return;
 
