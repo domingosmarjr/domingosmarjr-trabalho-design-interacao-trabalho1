@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // pega html
 const cartao = document.getElementById("cartao");
+if (!cartao) return;
+
 const texto = document.getElementById("texto");
 const corTexto = document.getElementById("corTexto");
 const corFundo = document.getElementById("corFundo");
@@ -10,23 +11,19 @@ const imagem = document.getElementById("imagem");
 const tipoElemento = document.getElementById("tipoElemento");
 const btnAdd = document.getElementById("addElemento");
 
-// elemento do cartão a ser selecionado
 let elementoSelecionado = null;
 
 // inicia com primeiro elemento
 const primeiro = document.querySelector(".elemento");
-if (primeiro) {
-    selecionarElemento(primeiro);
-}
+if (primeiro) selecionarElemento(primeiro);
 
-// seleciona elemento no click
+// selecionar elemento
 cartao.addEventListener("click", (e) => {
     if (e.target.classList.contains("elemento")) {
         selecionarElemento(e.target);
     }
 });
 
-// função de seleção
 function selecionarElemento(el) {
     document.querySelectorAll(".elemento").forEach(e => {
         e.classList.remove("selecionado");
@@ -35,34 +32,40 @@ function selecionarElemento(el) {
     elementoSelecionado = el;
     el.classList.add("selecionado");
 
-    texto.value = el.textContent || "";
+    // evita erro com imagem
+    if (texto) {
+        texto.value = el.tagName === "IMG" ? "" : el.textContent;
+    }
 }
 
-// Atualizar cartão
 function atualizarCartao() {
     if (!elementoSelecionado) return;
 
-    elementoSelecionado.textContent = texto.value || "Texto editável";
-    elementoSelecionado.style.color = corTexto.value;
-    elementoSelecionado.style.fontSize = tamanho.value + "px";
+    // não tenta editar texto de imagem
+    if (elementoSelecionado.tagName !== "IMG") {
+        elementoSelecionado.textContent = texto.value || "Texto editável";
+    }
+
+    elementoSelecionado.style.color = corTexto?.value || "#000";
+    elementoSelecionado.style.fontSize = (tamanho?.value || 16) + "px";
 }
 
-// eventos de edição
-texto.addEventListener("input", atualizarCartao);
-corTexto.addEventListener("input", atualizarCartao);
-tamanho.addEventListener("input", atualizarCartao);
+// eventos protegidos
+texto?.addEventListener("input", atualizarCartao);
+corTexto?.addEventListener("input", atualizarCartao);
+tamanho?.addEventListener("input", atualizarCartao);
 
-corFundo.addEventListener("input", () => {
+corFundo?.addEventListener("input", () => {
     cartao.style.backgroundColor = corFundo.value;
 });
 
-// inserir imagem (CORRIGIDO)
-imagem.addEventListener("change", () => {
-    const file = imagem.files[0];
-    if (!file) return;
+// imagem via URL
+imagem?.addEventListener("change", () => {
+    const url = imagem.value.trim();
+    if (!url) return;
 
     const img = document.createElement("img");
-    img.src = URL.createObjectURL(file);
+    img.src = url;
     img.classList.add("elemento");
     img.style.maxWidth = "100%";
     img.style.marginTop = "10px";
@@ -71,8 +74,8 @@ imagem.addEventListener("change", () => {
     selecionarElemento(img);
 });
 
-// Criar novos elementos
-btnAdd.addEventListener("click", () => {
+// criar elementos
+btnAdd?.addEventListener("click", () => {
     const tipo = tipoElemento.value;
     if (!tipo) return;
 
@@ -106,4 +109,6 @@ btnAdd.addEventListener("click", () => {
     }
 
     tipoElemento.value = "";
+});
+
 });
