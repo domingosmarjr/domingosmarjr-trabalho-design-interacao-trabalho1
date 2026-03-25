@@ -3,23 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equipe Rats</title>
+    <title>Editor de Cartões - Equipe RATS</title>
+    <style src="style.css"></style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+
 </head>
+
 <body>
     <header class="bg-dark text-white p-3 text-center">
-            <h1>EQUIPE RATS - Trabalhos de DI</h1>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
-            <div class="container">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="cartoes.html">T1 - Editor Cartões</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">T2 - </a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">T3 - </a></li>
-                </ul>
-            </div>
-        </nav>
+        <h1>EQUIPE RATS - Editor de Cartões</h1>
     </header>
 
     <main class="container my-4">
@@ -28,50 +20,46 @@
 
             <!-- FORMULÁRIO -->
             <div class="col-md-6">
-                <h1>Editar Cartão</h1>
+                <h2>Editar Cartão</h2>
 
-                <form id="formCartao">
+                <label class="form-label">Texto</label>
+                <input type="text" id="texto" class="form-control mb-2">
 
-                    <label for="texto" class="form-label">Texto</label>
-                    <input type="text" id="texto" class="form-control mb-2" maxlength="50" placeholder="Digite uma mensagem">
+                <label class="form-label">Cor do texto</label>
+                <input type="color" id="corTexto" class="form-control form-control-color mb-2">
 
-                    <label for="corTexto" class="form-label">Cor do texto</label>
-                    <input type="color" id="corTexto" class="form-control form-control-color mb-2">
+                <label class="form-label">Cor de fundo</label>
+                <input type="color" id="corFundo" class="form-control form-control-color mb-2">
 
-                    <label for="corFundo" class="form-label">Cor de fundo</label>
-                    <input type="color" id="corFundo" class="form-control form-control-color mb-2">
+                <label class="form-label">Tamanho do texto</label>
+                <input type="range" id="tamanho" min="12" max="40" value="16" class="form-range">
 
-                    <label for="tamanho" class="form-label">Tamanho do texto</label>
-                    <input type="range" id="tamanho" min="12" max="40" value="16" class="form-range">
+                <label class="form-label">Imagem (URL)</label>
+                <input type="url" id="imagem" class="form-control mb-2">
 
-                    <label for="imagem" class="form-label">Imagem (URL)</label>
-                    <input type="url" id="imagem" class="form-control mb-2" placeholder="https://...">
+                <hr>
 
-                    <hr>
+                <label class="form-label">Adicionar elemento</label>
+                <select id="tipoElemento" class="form-select mb-2">
+                    <option value="">Selecione</option>
+                    <option value="titulo">Título</option>
+                    <option value="paragrafo">Parágrafo</option>
+                    <option value="caixa">Caixa destacada</option>
+                </select>
 
-                    <!-- NOVO: adicionar elementos -->
-                    <label for="tipoElemento" class="form-label">Adicionar elemento</label>
-                    <select id="tipoElemento" class="form-select mb-2">
-                        <option value="">Selecione</option>
-                        <option value="titulo">Título</option>
-                        <option value="paragrafo">Parágrafo</option>
-                        <option value="caixa">Caixa destacada</option>
-                    </select>
+                <button id="addElemento" class="btn btn-danger w-100">
+                    Adicionar ao cartão
+                </button>
 
-                    <button type="button" id="addElemento" class="btn btn-danger w-100">
-                        Adicionar ao cartão
-                    </button>
-
-                </form>
             </div>
 
             <!-- CARTÃO -->
             <div class="col-md-6">
-                <h1>Pré-visualização</h1>
+                <h2>Pré-visualização</h2>
 
                 <div id="cartao" class="cartao">
                     <div class="elemento" contenteditable="true">
-                        Seu texto aqui
+                        Clique aqui e edite
                     </div>
                 </div>
             </div>
@@ -81,7 +69,7 @@
     </main>
 
     <footer class="bg-dark text-white text-center p-3">
-        <p>Equipe RATS</p>
+        Equipe RATS
     </footer>
 
     <script src="script.js"></script>

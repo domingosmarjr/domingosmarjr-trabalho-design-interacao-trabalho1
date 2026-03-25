@@ -1,68 +1,76 @@
+// pega html
 const cartao = document.getElementById("cartao");
-
 const texto = document.getElementById("texto");
 const corTexto = document.getElementById("corTexto");
 const corFundo = document.getElementById("corFundo");
 const tamanho = document.getElementById("tamanho");
 const imagem = document.getElementById("imagem");
-
 const tipoElemento = document.getElementById("tipoElemento");
 const btnAdd = document.getElementById("addElemento");
 
+// elemento do cartão a ser selecionado
 let elementoSelecionado = null;
 
-// =========================
-// SELECIONAR ELEMENTO
-// =========================
+// inicia
+window.addEventListener("DOMContentLoaded", () => {
+    const primeiro = document.querySelector(".elemento");
+    if (primeiro) {
+        selecionarElemento(primeiro);
+    }
+});
+
+// seleciona elemento no click
 cartao.addEventListener("click", (e) => {
     if (e.target.classList.contains("elemento")) {
         selecionarElemento(e.target);
     }
 });
 
+// remove o selecionado, 
 function selecionarElemento(el) {
-    // remove seleção anterior
     document.querySelectorAll(".elemento").forEach(e => {
         e.classList.remove("selecionado");
     });
-
+    // salva o novo
     elementoSelecionado = el;
     el.classList.add("selecionado");
+    // atualiza input
+    texto.value = el.textContent;
 }
 
-// =========================
-// ATUALIZAÇÕES
-// =========================
+// Atualizar cartão
 function atualizarCartao() {
     if (!elementoSelecionado) return;
 
     elementoSelecionado.textContent = texto.value || "Texto editável";
     elementoSelecionado.style.color = corTexto.value;
     elementoSelecionado.style.fontSize = tamanho.value + "px";
-
-    cartao.style.backgroundColor = corFundo.value;
 }
 
-// =========================
-// INSERIR IMAGEM
-// =========================
+// events de editar [dinÂmico]
+texto.addEventListener("input", atualizarCartao);
+corTexto.addEventListener("input", atualizarCartao);
+tamanho.addEventListener("input", atualizarCartao);
+
+corFundo.addEventListener("input", () => {
+    cartao.style.backgroundColor = corFundo.value;
+});
+// inserir imagem
 imagem.addEventListener("change", () => {
-    if (imagem.value.trim() === "") return;
+    if (!imagem.value.trim()) return;
 
     const img = document.createElement("img");
     img.src = imagem.value;
-    img.alt = "Imagem do cartão";
     img.classList.add("elemento");
 
     cartao.appendChild(img);
+    selecionarElemento(img);
 });
 
-// =========================
-// CRIAR ELEMENTOS
-// =========================
+// Criar novos elementos
 btnAdd.addEventListener("click", () => {
     const tipo = tipoElemento.value;
-    if (!tipo) return;
+    if (!tipo) return; //nada selecionado
 
     let novo;
 
@@ -79,8 +87,9 @@ btnAdd.addEventListener("click", () => {
     if (tipo === "caixa") {
         novo = document.createElement("div");
         novo.textContent = "Caixa editável";
-        novo.style.border = "1px solid #c1121f";
+        novo.style.border = "2px solid red";
         novo.style.padding = "10px";
+        novo.style.borderRadius = "8px";
     }
 
     if (novo) {
@@ -89,15 +98,8 @@ btnAdd.addEventListener("click", () => {
         novo.style.marginTop = "10px";
 
         cartao.appendChild(novo);
+        selecionarElemento(novo);
     }
 
     tipoElemento.value = "";
 });
-
-// =========================
-// EVENTOS
-// =========================
-texto.addEventListener("input", atualizarCartao);
-corTexto.addEventListener("input", atualizarCartao);
-corFundo.addEventListener("input", atualizarCartao);
-tamanho.addEventListener("input", atualizarCartao);
