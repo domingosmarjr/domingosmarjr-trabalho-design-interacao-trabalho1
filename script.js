@@ -1,4 +1,6 @@
-// pega html
+document.addEventListener("DOMContentLoaded", () => {
+
+    // pega html
 const cartao = document.getElementById("cartao");
 const texto = document.getElementById("texto");
 const corTexto = document.getElementById("corTexto");
@@ -11,13 +13,11 @@ const btnAdd = document.getElementById("addElemento");
 // elemento do cartão a ser selecionado
 let elementoSelecionado = null;
 
-// inicia
-window.addEventListener("DOMContentLoaded", () => {
-    const primeiro = document.querySelector(".elemento");
-    if (primeiro) {
-        selecionarElemento(primeiro);
-    }
-});
+// inicia com primeiro elemento
+const primeiro = document.querySelector(".elemento");
+if (primeiro) {
+    selecionarElemento(primeiro);
+}
 
 // seleciona elemento no click
 cartao.addEventListener("click", (e) => {
@@ -26,16 +26,16 @@ cartao.addEventListener("click", (e) => {
     }
 });
 
-// remove o selecionado, 
+// função de seleção
 function selecionarElemento(el) {
     document.querySelectorAll(".elemento").forEach(e => {
         e.classList.remove("selecionado");
     });
-    // salva o novo
+
     elementoSelecionado = el;
     el.classList.add("selecionado");
-    // atualiza input
-    texto.value = el.textContent;
+
+    texto.value = el.textContent || "";
 }
 
 // Atualizar cartão
@@ -47,7 +47,7 @@ function atualizarCartao() {
     elementoSelecionado.style.fontSize = tamanho.value + "px";
 }
 
-// events de editar [dinÂmico]
+// eventos de edição
 texto.addEventListener("input", atualizarCartao);
 corTexto.addEventListener("input", atualizarCartao);
 tamanho.addEventListener("input", atualizarCartao);
@@ -55,13 +55,17 @@ tamanho.addEventListener("input", atualizarCartao);
 corFundo.addEventListener("input", () => {
     cartao.style.backgroundColor = corFundo.value;
 });
-// inserir imagem
+
+// inserir imagem (CORRIGIDO)
 imagem.addEventListener("change", () => {
-    if (!imagem.value.trim()) return;
+    const file = imagem.files[0];
+    if (!file) return;
 
     const img = document.createElement("img");
-    img.src = imagem.value;
+    img.src = URL.createObjectURL(file);
     img.classList.add("elemento");
+    img.style.maxWidth = "100%";
+    img.style.marginTop = "10px";
 
     cartao.appendChild(img);
     selecionarElemento(img);
@@ -70,7 +74,7 @@ imagem.addEventListener("change", () => {
 // Criar novos elementos
 btnAdd.addEventListener("click", () => {
     const tipo = tipoElemento.value;
-    if (!tipo) return; //nada selecionado
+    if (!tipo) return;
 
     let novo;
 
